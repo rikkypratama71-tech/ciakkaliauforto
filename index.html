@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Keuangan Pribadi Fina - Dilindungi Password</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; padding: 20px; background: #f0f2f5; color: #333; }
+        .container { max-width: 500px; margin: 0 auto; }
+        h1 { text-align: center; color: #2c3e50; }
+        #loginPage, #appPage { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
+        input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; }
+        button { width: 100%; padding: 12px; background: #3498db; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 16px; }
+        button:hover { background: #2980b9; }
+        #appPage { display: none; }
+        .saldo { text-align: center; font-size: 1.5em; margin: 20px 0; font-weight: bold; color: #27ae60; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #eee; }
+        th { background: #ecf0f1; }
+        .hapus { color: #e74c3c; cursor: pointer; font-weight: bold; }
+        #formTransaksi { margin-top: 20px; }
+        select, input[type="date"] { padding: 10px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Keuangan Pribadi Fina</h1>
+
+    <!-- Halaman Login / Set Password -->
+    <div id="loginPage">
+        <h2>Masuk dengan Password</h2>
+        <p id="loginMsg">Masukkan password (pertama kali buat password baru).</p>
+        <input type="password" id="passwordInput" placeholder="Masukkan password" required>
+        <button onclick="handleLogin()">Masuk / Set Password</button>
+    </div>
+
+    <!-- Halaman Aplikasi Keuangan (disembunyikan dulu) -->
+    <div id="appPage">
+        <button onclick="logout()" style="background:#e74c3c; margin-bottom:20px;">Keluar (Logout)</button>
+        
+        <div class="saldo">Saldo Saat Ini: Rp <span id="saldo">0</span></div>
+
+        <form id="formTransaksi">
+            <select id="tipe">
+                <option value="pemasukan">Pemasukan</option>
+                <option value="pengeluaran">Pengeluaran</option>
+            </select>
+            
+            <input type="text" id="deskripsi" placeholder="Deskripsi (misal: Gaji / Makan)" required>
+            
+            <input type="number" id="jumlah" placeholder="Jumlah (Rp)" required min="1">
+            
+            <input type="date" id="tanggal" required>
+            
+            <button type="submit">Tambah</button>
+        </form>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Tipe</th>
+                    <th>Deskripsi</th>
+                    <th>Jumlah</th>
+                    <th>Tanggal</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody id="daftarTransaksi"></tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    const PASSWORD_KEY = 'finakeuangan_password';
+    const TRANS_KEY = 'finakeuangan_transaksi';
+    let transaksi = JSON.parse(localStorage.getItem(TRANS_KEY)) || [];
+    let isLoggedIn = false;
+
+    const loginPage = document.getElementById('loginPage');
+    const appPage = document.getElementById('appPage');
+    const passwordInput = document.getElementById('passwordInput');
+    const loginMsg = document.getElementById('loginMsg');
+
+    function hashPassword(pw) {
+        return btoa(pw); // Simple base64, cukup untuk proteksi dasar
+    }
+
+    function checkPassword() {
+        const storedHash = localStorage.getItem(PASSWORD_KEY);
+        if (!storedHash) {
+            loginMsg.textContent = "Belum ada password. Buat password baru sekarang!";
+            return null;
+        }
+        return storedHash;
+    }
+
+    function handleLogin() {
+        const pw = passwordInput.value.trim();
+        if (!pw) {
+            alert("Password jangan kosong ya!");
+            return;
+        }
+
+        const storedHash = checkPassword();
+
+        if (!storedHash) {
+            // Set password pertama kali
+            if (confirm("Ini password baru. Pastikan ingat ya!")) {
+                localStorage.setItem(PASSWORD_KEY, hashPassword(pw));
+                alert("Password berhasil diset! Sekarang masuk lagi.");
+                passwordInput.value = '';
+            }
+        } else {
+            // Cek login
+            if (hashPassword(pw) === storedHash) {
+                isLoggedIn = true;
+                loginPage.style.display = 'none';
+                appPage.style.display = 'block';
+                tampilkanTransaksi();
+            } else {
+                alert("Password salah! Coba lagi.");
+            }
+        }
+    }
+
+    function logout() {
+        isLoggedIn = false;
+        appPage.style.display = 'none';
+        loginPage.style.display = 'block';
+        passwordInput.value = '';
+        loginMsg.textContent = "Masukkan password untuk masuk.";
+    }
+
+    function updateSaldo() {
+        let saldo = 0;
+        transaksi.forEach(t => {
+            if (t.tipe === 'pemasukan') saldo += t.jumlah;
+            else saldo -= t.jumlah;
+        });
+        document.getElementById('saldo').textContent = saldo.toLocaleString('id-ID');
+    }
+
+    function tampilkanTransaksi() {
+        const tbody = document.getElementById('daftarTransaksi');
+        tbody.innerHTML = '';
+        transaksi.forEach((t, index) => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td>${t.tipe === 'pemasukan' ? 'Pemasukan' : 'Pengeluaran'}</td>
+                <td>${t.deskripsi}</td>
+                <td>Rp ${t.jumlah.toLocaleString('id-ID')}</td>
+                <td>${t.tanggal}</td>
+                <td><span class="hapus" onclick="hapus(${index})">Hapus</span></td>
+            `;
+            tbody.appendChild(tr);
+        });
+        updateSaldo();
+    }
+
+    function simpan() {
+        localStorage.setItem(TRANS_KEY, JSON.stringify(transaksi));
+    }
+
+    function hapus(index) {
+        if (confirm("Yakin hapus transaksi ini?")) {
+            transaksi.splice(index, 1);
+            simpan();
+            tampilkanTransaksi();
+        }
+    }
+
+    document.getElementById('formTransaksi').addEventListener('submit', e => {
+        e.preventDefault();
+        if (!isLoggedIn) return;
+
+        const tipe = document.getElementById('tipe').value;
+        const deskripsi = document.getElementById('deskripsi').value;
+        const jumlah = parseInt(document.getElementById('jumlah').value);
+        const tanggal = document.getElementById('tanggal').value;
+
+        transaksi.push({ tipe, deskripsi, jumlah, tanggal });
+        simpan();
+        tampilkanTransaksi();
+        e.target.reset();
+    });
+
+    // Cek awal: kalau sudah ada password, langsung minta login
+    if (localStorage.getItem(PASSWORD_KEY)) {
+        loginMsg.textContent = "Masukkan password untuk akses data keuanganmu.";
+    }
+</script>
+</body>
+</html>
