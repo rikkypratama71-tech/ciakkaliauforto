@@ -1,0 +1,20 @@
+{
+  "name": "Keuangan Pribadi Fina",
+  "short_name": "Keuangan Fina",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0a0a0a",
+  "theme_color": "#d4af37",
+  "icons": [
+    {
+      "src": "https://via.placeholder.com/192?text=F", // Ganti dengan icon asli (192x192 png)
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "https://via.placeholder.com/512?text=F", // 512x512
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
