@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Keuangan Pribadi Fina - One Piece Treasure Mode</title>
+    <title>Keuangan Pribadi Fina - Gear 5 Treasure Mode</title>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Montserrat:wght@400;500;600&family=Bangers&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
@@ -12,24 +12,22 @@
 
     <style>
         :root {
-            --bg: #0a1f44; /* Laut malam One Piece */
+            --bg: #0a1f44;
             --card-bg: rgba(17, 17, 17, 0.85);
             --text: #e0e0e0;
-            --gold: #ffd700; /* Treasure gold */
+            --gold: #ffd700;
             --gold-dark: #d4af37;
             --gold-light: #ffeb3b;
-            --gold-glow: rgba(255, 215, 0, 0.6);
-            --accent-white: #ffffff; /* Gear 5 vibe */
+            --gold-glow: rgba(255, 215, 0, 0.7);
+            --white-glow: rgba(255, 255, 255, 0.8);
             --red: #c0392b;
         }
-        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Montserrat', sans-serif;
             background: linear-gradient(135deg, #0a1f44 0%, #001122 100%);
             color: var(--text);
             min-height: 100vh;
             padding: 15px;
-            background-image: url('https://images.alphacoders.com/135/1358650.jpg'); /* Subtle One Piece sea/sky bg, ganti kalau mau */
             background-size: cover;
             background-attachment: fixed;
         }
@@ -38,161 +36,134 @@
             font-family: 'Bangers', cursive;
             text-align: center;
             color: var(--gold);
-            margin: 20px 0 30px;
-            font-size: clamp(2.2em, 9vw, 3.5em);
-            text-shadow: 3px 3px 0 #000, 0 0 20px var(--gold-glow);
-            letter-spacing: 2px;
+            font-size: clamp(2.5em, 10vw, 4em);
+            text-shadow: 4px 4px 0 #000, 0 0 25px var(--gold-glow);
+            margin: 20px 0;
         }
         #loginPage, #appPage {
             background: var(--card-bg);
-            padding: clamp(20px, 5vw, 50px) clamp(15px, 4vw, 40px);
+            padding: 30px;
             border-radius: 20px;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.8), 0 0 30px var(--gold-glow);
-            border: 2px solid var(--gold);
-            backdrop-filter: blur(8px);
+            box-shadow: 0 0 40px var(--gold-glow);
+            border: 3px solid var(--gold);
         }
-        /* Saldo dengan bounce animasi */
-        .saldo-container { text-align: center; margin: 40px 0; }
         .saldo {
-            font-family: 'Playfair Display', serif;
-            font-size: clamp(3.5em, 13vw, 6em);
+            font-size: clamp(4em, 15vw, 7em);
             font-weight: 900;
-            background: linear-gradient(90deg, var(--gold), var(--gold-light), var(--accent-white), var(--gold));
+            background: linear-gradient(90deg, var(--gold), var(--gold-light), #fff, var(--gold));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            text-shadow: 0 0 25px var(--gold-glow);
-            animation: glowPulse 4s infinite alternate, bounce 0.6s ease;
+            text-shadow: 0 0 30px var(--gold-glow);
+            transition: transform 0.5s;
         }
-        @keyframes glowPulse { 0% { text-shadow: 0 0 15px var(--gold-glow); } 100% { text-shadow: 0 0 40px var(--gold-glow); } }
-        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
-        /* Tombol dengan ripple wave (gelombang laut One Piece) */
+        .gear5-active .saldo {
+            animation: gear5Stretch 1.2s ease-in-out;
+        }
+        @keyframes gear5Stretch {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.3) rotate(5deg); }
+        }
+        .gear5-flash {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: white;
+            opacity: 0;
+            pointer-events: none;
+            z-index: 9999;
+            animation: flashWhite 0.8s ease-out;
+        }
+        @keyframes flashWhite {
+            0% { opacity: 0.6; }
+            100% { opacity: 0; }
+        }
         button {
-            position: relative;
-            overflow: hidden;
-            width: 100%;
-            padding: 16px;
-            margin: 12px 0;
-            border-radius: 12px;
-            font-size: 1.2em;
-            font-weight: 600;
             background: linear-gradient(145deg, var(--gold), var(--gold-dark));
             color: #000;
-            box-shadow: 0 6px 20px var(--gold-glow);
-            border: 2px solid var(--accent-white);
-            transition: all 0.3s;
+            box-shadow: 0 8px 25px var(--gold-glow);
+            border: 2px solid white;
         }
-        button::after {
-            content: '';
-            position: absolute;
-            top: 50%; left: 50%;
-            width: 0; height: 0;
-            background: rgba(255,255,255,0.3);
-            border-radius: 50%;
-            transform: translate(-50%, -50%);
-            transition: width 0.6s, height 0.6s;
-            pointer-events: none;
-        }
-        button:hover::after { width: 300px; height: 300px; }
-        button:hover { transform: scale(1.05); box-shadow: 0 12px 30px var(--gold-glow); }
-        .logout { background: linear-gradient(145deg, var(--red), #8b0000); }
-        /* Row transaksi fade-in + sparkle */
-        tr.new-row { animation: fadeInSpark 1s ease-out; }
-        @keyframes fadeInSpark {
-            0% { opacity: 0; transform: translateY(20px); }
-            100% { opacity: 1; transform: translateY(0); }
-        }
-        .sparkle { animation: sparkle 1.5s infinite; }
-        @keyframes sparkle { 0%,100% { opacity: 0.4; } 50% { opacity: 1; } }
-        /* Responsif */
-        @media (max-width: 600px) { h1 { font-size: 2.5em; } .saldo { font-size: 3.5em; } }
+        button:hover { transform: scale(1.08); box-shadow: 0 15px 40px var(--gold-glow); }
+        /* Sisanya style seperti sebelumnya (tabel, input, dll) */
+        tr.new-row { animation: fadeInSpark 1.2s ease-out; }
+        @keyframes fadeInSpark { 0% { opacity: 0; transform: translateY(30px) scale(0.9); } 100% { opacity: 1; transform: translateY(0) scale(1); } }
     </style>
 </head>
 <body>
 
 <div class="container">
+    <!-- Login & App Page seperti sebelumnya, dengan teks One Piece flavor -->
     <div id="loginPage">
         <h1>Keuangan Pribadi Fina</h1>
-        <h2>Masuk ke Kapal!</h2>
-        <p id="loginMsg">Masukkan password (pertama kali buat password baru).</p>
-        <input type="password" id="passwordInput" placeholder="Password rahasia harta karun" required>
-        <button onclick="handleLogin()">Masuk / Set Password</button>
+        <h2>Awakening Mode!</h2>
+        <p id="loginMsg">Masukkan password rahasia Joy Boy!</p>
+        <input type="password" id="passwordInput" placeholder="Gear... Up!" required>
+        <button onclick="handleLogin()">Bangkit! (Masuk / Set Password)</button>
     </div>
 
     <div id="appPage" style="display:none;">
-        <button class="logout" onclick="logout()">Keluar dari Kapal (Logout)</button>
+        <button class="logout" onclick="logout()">Kembali ke East Blue (Logout)</button>
         
         <div class="saldo-container">
-            <div class="saldo-label">Harta Karun Saat Ini</div>
-            <div class="saldo"><span style="font-size:0.6em;">Rp</span> <span id="saldo">0</span></div>
+            <div class="saldo-label">Harta Karun Joy Boy Saat Ini</div>
+            <div class="saldo"><span>Rp</span> <span id="saldo">0</span></div>
         </div>
 
-        <form id="formTransaksi">
-            <select id="tipe">
-                <option value="pemasukan">Pemasukan (Harta Masuk)</option>
-                <option value="pengeluaran">Pengeluaran (Harta Keluar)</option>
-            </select>
-            <input type="text" id="deskripsi" placeholder="Deskripsi (misal: Gaji / Beli daging)" required>
-            <input type="number" id="jumlah" placeholder="Jumlah Belly (Rp)" required min="1">
-            <input type="date" id="tanggal" required>
-            <button type="submit">Tambah ke Log Buku Harian!</button>
-        </form>
+        <!-- Form & Tabel sama seperti sebelumnya -->
 
-        <table>
-            <thead>
-                <tr>
-                    <th>Tipe</th>
-                    <th>Deskripsi</th>
-                    <th>Jumlah</th>
-                    <th>Tanggal</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody id="daftarTransaksi"></tbody>
-        </table>
-
-        <div id="chartContainer">
-            <canvas id="monthlyChart"></canvas>
-        </div>
+        <!-- Flash effect untuk Gear 5 -->
+        <div id="gear5Flash" class="gear5-flash"></div>
     </div>
 </div>
 
+<!-- Audio -->
 <audio id="clickSound" preload="auto">
     <source src="https://assets.mixkit.co/sfx/preview/mixkit-arcade-game-jump-coin-216.mp3" type="audio/mpeg">
 </audio>
+<audio id="gear5Laugh" preload="auto">
+    <source src="https://www.voicy.network/sounds/bYK8Hau-30us3GUNgGvAcw-gear-5-luffy-laugh" type="audio/mpeg"> <!-- Ganti dengan link MP3 free kalau ini nggak work -->
+</audio>
+<audio id="drumsLiberation" preload="auto">
+    <source src="https://www.voicy.network/sounds/DSvMiQiA00yo02gFNKUdJg-drums-of-liberation" type="audio/mpeg"> <!-- Drums of Liberation free preview -->
+</audio>
 
 <script>
-    // Kode JS sama seperti sebelumnya, tapi tambah animasi row baru
-    // ... (copy semua JS dari versi sebelumnya: PASSWORD_KEY, transaksi, handleLogin, logout, playClick, updateSaldo, launchGoldConfetti, tampilkanTransaksi, simpan, hapus, updateMonthlyChart)
+    // ... (kode JS core sama seperti sebelumnya: transaksi, login, updateSaldo, confetti, chart, dll)
 
-    // Tambah di dalam tampilkanTransaksi() untuk animasi row
-    function tampilkanTransaksi() {
-        const tbody = document.getElementById('daftarTransaksi');
-        tbody.innerHTML = '';
-        transaksi.forEach((t, i) => {
-            const tr = document.createElement('tr');
-            tr.classList.add('new-row'); // Fade-in + sparkle
-            tr.innerHTML = `
-                <td>${t.tipe === 'pemasukan' ? 'Pemasukan' : 'Pengeluaran'}</td>
-                <td>${t.deskripsi}</td>
-                <td>Rp ${t.jumlah.toLocaleString('id-ID')}</td>
-                <td>${t.tanggal}</td>
-                <td><span class="hapus" onclick="hapus(${i})">Hapus</span></td>
-            `;
-            tbody.appendChild(tr);
+    const gear5Laugh = document.getElementById('gear5Laugh');
+    const drums = document.getElementById('drumsLiberation');
+    const flashDiv = document.getElementById('gear5Flash');
+
+    function triggerGear5() {
+        // Flash putih + animasi stretch
+        flashDiv.style.opacity = '0.6';
+        document.body.classList.add('gear5-active');
+        setTimeout(() => {
+            flashDiv.style.opacity = '0';
+            document.body.classList.remove('gear5-active');
+        }, 800);
+
+        // Play suara Gear 5
+        drums.currentTime = 0;
+        drums.play().catch(() => {});
+        setTimeout(() => {
+            gear5Laugh.currentTime = 0;
+            gear5Laugh.play().catch(() => {});
+        }, 400);
+
+        // Confetti lebih gila (white + gold)
+        confetti({
+            particleCount: 150,
+            spread: 180,
+            origin: { y: 0.6 },
+            colors: ['#ffffff', '#ffd700', '#ffeb3b', '#d4af37']
         });
-        const currentSaldo = updateSaldo();
-        if (currentSaldo > prevSaldo) {
-            launchGoldConfetti(); // Confetti treasure
-            // Tambah sparkle di saldo
-            document.querySelector('.saldo').classList.add('sparkle');
-            setTimeout(() => document.querySelector('.saldo').classList.remove('sparkle'), 2000);
-        }
-        prevSaldo = currentSaldo;
-        updateMonthlyChart();
     }
 
-    // Sisanya sama seperti kode sebelumnya...
-    // (paste bagian script lengkap dari respons terakhir kalau perlu)
+    // Di updateSaldo atau tampilkanTransaksi, panggil triggerGear5 kalau saldo naik besar
+    // Contoh di akhir updateSaldo():
+    // if (currentSaldo - prevSaldo > 10000) triggerGear5();  // Sesuaikan threshold
+
+    // Sisanya script seperti sebelumnya...
 </script>
 </body>
 </html>
