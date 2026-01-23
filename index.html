@@ -4,17 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Keuangan Pribadi Fina</title>
-    <!-- Google Fonts -->
+    <!-- Google Fonts untuk tampilan mewah -->
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
-    <!-- Chart.js CDN -->
+    <!-- Chart.js untuk grafik -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <!-- Confetti CDN (sudah ada sebelumnya) -->
+    <!-- Confetti emas -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
-    <!-- Manifest untuk PWA -->
-    <link rel="manifest" href="/manifest.json">
+    <!-- PWA manifest -->
+    <link rel="manifest" href="./manifest.json">
     <meta name="theme-color" content="#111111">
+
     <style>
-        /* CSS lama + tweak kecil untuk chart */
         :root {
             --bg: #0a0a0a;
             --card-bg: #111111;
@@ -25,7 +25,101 @@
             --gold-glow: rgba(212, 175, 55, 0.5);
             --red: #c0392b;
         }
-        /* ... (copy semua CSS dari versi sebelumnya, tambah ini untuk chart) */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: radial-gradient(circle at top right, #1a1a1a, #0a0a0a);
+            color: var(--text);
+            min-height: 100vh;
+            padding: 15px;
+        }
+        .container { max-width: 700px; margin: 0 auto; }
+        h1 {
+            font-family: 'Playfair Display', serif;
+            text-align: center;
+            color: var(--gold);
+            margin: 20px 0 30px;
+            font-size: clamp(2em, 8vw, 3em);
+            text-shadow: 0 0 15px var(--gold-glow);
+        }
+        #loginPage, #appPage {
+            background: var(--card-bg);
+            padding: clamp(20px, 5vw, 50px) clamp(15px, 4vw, 40px);
+            border-radius: 20px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.8), inset 0 0 20px rgba(212,175,55,0.1);
+            border: 1px solid rgba(212,175,55,0.3);
+        }
+        .saldo-container { text-align: center; margin: clamp(30px, 8vw, 50px) 0; }
+        .saldo-label {
+            font-size: clamp(1.2em, 4vw, 1.4em);
+            color: #aaa;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+        .saldo {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(3em, 12vw, 5em);
+            font-weight: 700;
+            background: linear-gradient(90deg, var(--gold), var(--gold-light), var(--gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 20px var(--gold-glow), 0 0 40px rgba(212,175,55,0.4);
+            animation: glowPulse 5s infinite alternate;
+        }
+        @keyframes glowPulse {
+            0% { text-shadow: 0 0 10px var(--gold-glow); }
+            100% { text-shadow: 0 0 30px var(--gold-glow), 0 0 60px rgba(212,175,55,0.6); }
+        }
+        button {
+            width: 100%;
+            padding: clamp(12px, 4vw, 16px);
+            margin: 12px 0;
+            border: none;
+            border-radius: 12px;
+            font-size: clamp(1em, 4vw, 1.2em);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            background: linear-gradient(145deg, #f0d06e, #d4af37, #b8972e);
+            color: #111;
+            box-shadow: inset 0 2px 8px rgba(255,255,255,0.4), 0 6px 20px rgba(212,175,55,0.5), inset 0 -4px 10px rgba(0,0,0,0.3);
+            border: 1px solid #e6c14e;
+        }
+        button:hover {
+            transform: translateY(-3px) scale(1.03);
+            box-shadow: inset 0 2px 12px rgba(255,255,255,0.6), 0 12px 30px rgba(212,175,55,0.7);
+        }
+        button:active { transform: translateY(1px); box-shadow: inset 0 4px 10px rgba(0,0,0,0.5); }
+        .logout { background: linear-gradient(145deg, #c0392b, #a93226); box-shadow: 0 6px 20px rgba(192,57,43,0.5); }
+        .logout:hover { box-shadow: 0 12px 30px rgba(192,57,43,0.7); }
+        input, select {
+            width: 100%;
+            padding: clamp(12px, 4vw, 16px);
+            margin: 12px 0;
+            background: #181818;
+            border: 1px solid var(--gold-dark);
+            border-radius: 10px;
+            color: var(--text);
+            font-size: clamp(1em, 3.5vw, 1.1em);
+        }
+        input:focus, select:focus {
+            border-color: var(--gold-light);
+            box-shadow: 0 0 20px var(--gold-glow);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 30px;
+            background: #161616;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+        }
+        th, td { padding: clamp(10px, 3vw, 16px); text-align: left; }
+        th { background: linear-gradient(90deg, var(--gold-dark), var(--gold)); color: #111; }
+        .hapus { color: #ff8787; cursor: pointer; }
+        .hapus:hover { color: #ffb3b3; }
         #chartContainer {
             margin: 40px 0;
             padding: 20px;
@@ -34,30 +128,32 @@
             box-shadow: 0 5px 15px rgba(0,0,0,0.5);
         }
         canvas { max-height: 400px; }
-        @media (max-width: 600px) { #chartContainer { padding: 15px; } }
+        @media (max-width: 600px) {
+            body { padding: 10px; }
+            #loginPage, #appPage { padding: 25px 15px; border-radius: 16px; }
+            table { font-size: 0.9em; }
+            th, td { padding: 10px; }
+            #chartContainer { padding: 15px; }
+        }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <!-- Login Page -->
     <div id="loginPage">
         <h1>Keuangan Pribadi Fina</h1>
         <h2>Masuk</h2>
-        <p id="loginMsg">Masukkan password (pertama kali buat baru).</p>
+        <p id="loginMsg">Masukkan password (pertama kali buat password baru).</p>
         <input type="password" id="passwordInput" placeholder="Password" required>
         <button onclick="handleLogin()">Masuk / Set Password</button>
     </div>
 
-    <!-- App Page -->
     <div id="appPage" style="display:none;">
         <button class="logout" onclick="logout()">Keluar (Logout)</button>
         
         <div class="saldo-container">
             <div class="saldo-label">Saldo Saat Ini</div>
-            <div class="saldo">
-                <span style="font-size:0.6em; vertical-align:super;">Rp</span><span id="saldo">0</span>
-            </div>
+            <div class="saldo"><span style="font-size:0.6em; vertical-align:super;">Rp</span><span id="saldo">0</span></div>
         </div>
 
         <form id="formTransaksi">
@@ -84,63 +180,143 @@
             <tbody id="daftarTransaksi"></tbody>
         </table>
 
-        <!-- Grafik Saldo Bulanan -->
         <div id="chartContainer">
             <canvas id="monthlyChart"></canvas>
         </div>
     </div>
 </div>
 
-<!-- Audio untuk klik -->
+<!-- Suara klik -->
 <audio id="clickSound" preload="auto">
     <source src="https://assets.mixkit.co/sfx/preview/mixkit-arcade-game-jump-coin-216.mp3" type="audio/mpeg">
 </audio>
 
 <script>
-    // ... (kode JS lama: PASSWORD_KEY, TRANS_KEY, transaksi, isLoggedIn, prevSaldo, functions handleLogin, logout, updateSaldo, launchGoldConfetti, tampilkanTransaksi, simpan, hapus)
+    const PASSWORD_KEY = 'finakeuangan_password';
+    const TRANS_KEY = 'finakeuangan_transaksi';
+    let transaksi = JSON.parse(localStorage.getItem(TRANS_KEY)) || [];
+    let isLoggedIn = false;
+    let prevSaldo = 0;
 
-    // Tambah efek suara klik
+    const loginPage = document.getElementById('loginPage');
+    const appPage = document.getElementById('appPage');
+    const passwordInput = document.getElementById('passwordInput');
+    const loginMsg = document.getElementById('loginMsg');
     const clickAudio = document.getElementById('clickSound');
-    function playClick() {
-        clickAudio.currentTime = 0;
-        clickAudio.play().catch(e => console.log("Audio error:", e)); // Handle autoplay policy
+
+    function hashPassword(pw) { return btoa(pw); }
+
+    function checkPassword() {
+        const stored = localStorage.getItem(PASSWORD_KEY);
+        if (!stored) {
+            loginMsg.textContent = "Belum ada password. Buat sekarang!";
+            return null;
+        }
+        return stored;
     }
 
-    // Override submit form untuk play sound + confetti
-    document.getElementById('formTransaksi').addEventListener('submit', e => {
-        e.preventDefault();
-        if (!isLoggedIn) return;
-        playClick(); // Suara klik
-        // ... (kode push transaksi lama)
-        const tipe = document.getElementById('tipe').value;
-        // ... (push, simpan, tampilkanTransaksi, reset)
-    });
+    function handleLogin() {
+        const pw = passwordInput.value.trim();
+        if (!pw) return alert("Password jangan kosong!");
+        const stored = checkPassword();
+        if (!stored) {
+            if (confirm("Set password baru? Ingat ya!")) {
+                localStorage.setItem(PASSWORD_KEY, hashPassword(pw));
+                alert("Password diset! Masuk lagi.");
+                passwordInput.value = '';
+            }
+        } else {
+            if (hashPassword(pw) === stored) {
+                isLoggedIn = true;
+                loginPage.style.display = 'none';
+                appPage.style.display = 'block';
+                tampilkanTransaksi();
+            } else {
+                alert("Password salah!");
+            }
+        }
+    }
 
-    // Play sound juga di login button (opsional)
-    document.querySelector('#loginPage button').addEventListener('click', playClick);
+    function logout() {
+        isLoggedIn = false;
+        appPage.style.display = 'none';
+        loginPage.style.display = 'block';
+        passwordInput.value = '';
+    }
 
-    // Grafik Saldo Bulanan
+    function playClick() {
+        clickAudio.currentTime = 0;
+        clickAudio.play().catch(() => {});
+    }
+
+    function updateSaldo() {
+        let saldo = 0;
+        transaksi.forEach(t => saldo += (t.tipe === 'pemasukan' ? t.jumlah : -t.jumlah));
+        document.getElementById('saldo').textContent = saldo.toLocaleString('id-ID');
+        return saldo;
+    }
+
+    function launchGoldConfetti() {
+        const duration = 4000;
+        const animationEnd = Date.now() + duration;
+        const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 1000 };
+
+        function randomInRange(min, max) { return Math.random() * (max - min) + min; }
+
+        const interval = setInterval(() => {
+            const timeLeft = animationEnd - Date.now();
+            if (timeLeft <= 0) return clearInterval(interval);
+            confetti({ ...defaults, particleCount: 5, angle: 60, origin: { x: 0, y: Math.random() - 0.2 }, colors: ['#d4af37', '#f0d06e', '#b8972e', '#ffd700'] });
+            confetti({ ...defaults, particleCount: 5, angle: 120, origin: { x: 1, y: Math.random() - 0.2 }, colors: ['#d4af37', '#f0d06e', '#b8972e', '#ffd700'] });
+        }, 250);
+    }
+
+    function tampilkanTransaksi() {
+        const tbody = document.getElementById('daftarTransaksi');
+        tbody.innerHTML = '';
+        transaksi.forEach((t, i) => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td>${t.tipe.charAt(0).toUpperCase() + t.tipe.slice(1)}</td>
+                <td>${t.deskripsi}</td>
+                <td>Rp ${t.jumlah.toLocaleString('id-ID')}</td>
+                <td>${t.tanggal}</td>
+                <td><span class="hapus" onclick="hapus(${i})">Hapus</span></td>
+            `;
+            tbody.appendChild(tr);
+        });
+        const currentSaldo = updateSaldo();
+        if (currentSaldo > prevSaldo) launchGoldConfetti();
+        prevSaldo = currentSaldo;
+        updateMonthlyChart();
+    }
+
+    function simpan() { localStorage.setItem(TRANS_KEY, JSON.stringify(transaksi)); }
+
+    function hapus(index) {
+        if (confirm("Yakin hapus?")) {
+            transaksi.splice(index, 1);
+            simpan();
+            tampilkanTransaksi();
+        }
+    }
+
     let monthlyChart;
     function updateMonthlyChart() {
         if (!isLoggedIn) return;
-
-        // Group by month (YYYY-MM)
         const monthlyData = {};
         transaksi.forEach(t => {
             const date = new Date(t.tanggal);
-            const monthKey = date.toISOString().slice(0, 7); // YYYY-MM
+            const monthKey = date.toISOString().slice(0, 7);
             if (!monthlyData[monthKey]) monthlyData[monthKey] = 0;
             monthlyData[monthKey] += (t.tipe === 'pemasukan' ? t.jumlah : -t.jumlah);
         });
-
-        // Sort months
         const sortedMonths = Object.keys(monthlyData).sort();
         const labels = sortedMonths.map(m => new Date(m + '-01').toLocaleString('id-ID', { month: 'long', year: 'numeric' }));
         const data = sortedMonths.map(m => monthlyData[m]);
 
         const ctx = document.getElementById('monthlyChart').getContext('2d');
         if (monthlyChart) monthlyChart.destroy();
-
         monthlyChart = new Chart(ctx, {
             type: 'line',
             data: {
@@ -159,50 +335,31 @@
             },
             options: {
                 responsive: true,
-                scales: {
-                    y: { beginAtZero: false, ticks: { color: '#e0e0e0' } },
-                    x: { ticks: { color: '#e0e0e0' } }
-                },
+                scales: { y: { beginAtZero: false, ticks: { color: '#e0e0e0' } }, x: { ticks: { color: '#e0e0e0' } } },
                 plugins: { legend: { labels: { color: '#e0e0e0' } } }
             }
         });
     }
 
-    // Panggil update chart setelah tampilkanTransaksi
-    // Di akhir tampilkanTransaksi() tambah: updateMonthlyChart();
+    document.getElementById('formTransaksi').addEventListener('submit', e => {
+        e.preventDefault();
+        if (!isLoggedIn) return;
+        playClick();
+        const tipe = document.getElementById('tipe').value;
+        const deskripsi = document.getElementById('deskripsi').value;
+        const jumlah = parseInt(document.getElementById('jumlah').value);
+        const tanggal = document.getElementById('tanggal').value;
+        transaksi.push({ tipe, deskripsi, jumlah, tanggal });
+        simpan();
+        tampilkanTransaksi();
+        e.target.reset();
+    });
 
-    // PWA Push Notifications Basic
-    if ('serviceWorker' in navigator && 'PushManager' in window) {
-        navigator.serviceWorker.register('/sw.js')
-            .then(reg => {
-                console.log('Service Worker registered');
-                reg.pushManager.getSubscription().then(sub => {
-                    if (!sub) {
-                        // Minta permission & subscribe (jalankan sekali manual via console atau button)
-                        Notification.requestPermission().then(perm => {
-                            if (perm === 'granted') {
-                                reg.pushManager.subscribe({
-                                    userVisibleOnly: true,
-                                    applicationServerKey: 'YOUR_PUBLIC_VAPID_KEY_HERE' // Ganti dengan VAPID public key
-                                }).then(sub => console.log('Subscribed:', sub));
-                            }
-                        });
-                    }
-                });
-            })
-            .catch(err => console.log('SW error:', err));
+    document.querySelector('#loginPage button').addEventListener('click', playClick);
+
+    if (localStorage.getItem(PASSWORD_KEY)) {
+        loginMsg.textContent = "Masukkan password untuk akses.";
     }
-
-    // Di tampilkanTransaksi() setelah update, bisa trigger notif sederhana (local)
-    // Untuk real push, butuh server kirim ke endpoint subscription
-    // Untuk sekarang, contoh local notif:
-    function showLocalNotification(title, body) {
-        if (Notification.permission === 'granted') {
-            new Notification(title, { body });
-        }
-    }
-
-    // Contoh panggil setelah tambah transaksi: showLocalNotification('Transaksi Baru', 'Saldo telah diperbarui!');
 </script>
 </body>
 </html>
