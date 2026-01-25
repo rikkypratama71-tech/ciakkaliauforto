@@ -14,78 +14,96 @@
             --red: #c0392b;
             --card-bg: rgba(17, 17, 17, 0.9);
             --ocean-blue: #0077be;
-            --dark-ocean: #004d7c;
         }
 
         body {
             font-family: 'Montserrat', sans-serif;
-            background: linear-gradient(to bottom, #4a90e2, #2c5ba6); /* Warna langit */
+            background: linear-gradient(to bottom, #4facfe 0%, #00f2fe 100%);
             color: #e0e0e0;
             min-height: 100vh;
             margin: 0;
             padding: 20px;
             display: flex;
             justify-content: center;
-            overflow: hidden; /* Penting untuk animasi background */
-            position: relative; /* Untuk positioning elemen background */
+            overflow: hidden;
+            position: relative;
         }
 
-        /* Background Animasi Laut */
-        .ocean-background {
+        /* PERBAIKAN: Animasi Laut & Ombak pakai CSS Murni */
+        .ocean {
+            height: 150px; /* Tinggi air */
+            width: 100%;
             position: absolute;
             bottom: 0;
             left: 0;
-            width: 100%;
-            height: 40%; /* Tinggi laut */
-            background: linear-gradient(to top, var(--dark-ocean), var(--ocean-blue));
-            z-index: 0; /* Pastikan di belakang konten */
+            background: #015871;
+            z-index: 0;
         }
 
-        .waves {
+        .wave {
+            background: url(https://s3-us-west-2.amazonaws.com/s.cdpn.io/85486/wave.svg) repeat-x;
             position: absolute;
-            top: -20px; /* Sedikit di atas garis laut */
-            left: 0;
-            width: 200%; /* Lebih lebar dari layar */
-            height: 40px;
-            background: url('https://i.imgur.com/kS5Y2wI.png') repeat-x; /* Contoh gambar ombak transparan */
-            animation: waveMotion 15s linear infinite;
+            top: -198px;
+            width: 6400px;
+            height: 198px;
+            animation: wave 7s cubic-bezier(0.36, 0.45, 0.63, 0.53) infinite;
+            transform: translate3d(0, 0, 0);
         }
 
-        @keyframes waveMotion {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-50%); }
+        .wave:nth-of-type(2) {
+            top: -175px;
+            animation: wave 7s cubic-bezier(0.36, 0.45, 0.63, 0.53) -.125s infinite, swell 7s ease -1.25s infinite;
+            opacity: 1;
         }
 
-        /* Animasi Kapal Sunny Go */
+        @keyframes wave {
+            0% { margin-left: 0; }
+            100% { margin-left: -1600px; }
+        }
+
+        @keyframes swell {
+            0%, 100% { transform: translate3d(0, -25px, 0); }
+            50% { transform: translate3d(0, 5px, 0); }
+        }
+
+        /* Animasi Kapal Thousand Sunny */
         .sunny-go {
             position: absolute;
-            bottom: 15%; /* Posisi kapal di atas laut */
-            left: -250px; /* Mulai dari luar layar kiri */
-            width: 200px; /* Ukuran kapal */
-            z-index: 1; /* Di atas laut, di bawah konten utama */
-            animation: sailAcross 40s linear infinite; /* Animasi bergerak */
-            filter: drop-shadow(5px 5px 5px rgba(0,0,0,0.4));
-        }
-
-        .sunny-go img {
-            width: 100%;
-            height: auto;
+            bottom: 80px;
+            left: -250px;
+            width: 180px;
+            z-index: 1;
+            animation: sailAcross 30s linear infinite;
         }
 
         @keyframes sailAcross {
-            0% { left: -250px; transform: translateY(0); }
-            25% { transform: translateY(-10px); }
-            50% { transform: translateY(0); }
-            75% { transform: translateY(-10px); }
-            100% { left: 120%; transform: translateY(0); }
+            0% { left: -250px; transform: rotate(0deg); }
+            25% { transform: rotate(5deg) translateY(-10px); }
+            50% { transform: rotate(0deg) translateY(0px); }
+            75% { transform: rotate(-5deg) translateY(-10px); }
+            100% { left: 110%; transform: rotate(0deg); }
+        }
+
+        /* Elemen Awan */
+        .cloud {
+            position: absolute;
+            top: 50px;
+            background: #fff;
+            width: 100px; height: 30px;
+            border-radius: 50px;
+            opacity: 0.8;
+            filter: blur(5px);
+            animation: moveClouds 20s linear infinite;
+        }
+
+        @keyframes moveClouds {
+            from { left: -150px; }
+            to { left: 100%; }
         }
 
         .container { 
-            width: 100%; 
-            max-width: 600px; 
-            margin-top: 20px; 
-            position: relative; /* Penting agar container tetap di atas background */
-            z-index: 2; /* Pastikan di atas semua animasi background */
+            width: 100%; max-width: 600px; margin-top: 20px; 
+            position: relative; z-index: 2; 
         }
 
         #loginPage, #appPage, #settingsPage {
@@ -99,54 +117,22 @@
 
         h1 { font-family: 'Bangers', cursive; text-align: center; color: var(--gold); font-size: 3rem; text-shadow: 3px 3px 0 #000; margin: 0 0 20px 0; }
 
-        /* Wallet Display */
-        .wallet-display {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            margin-bottom: 25px;
-        }
-        .wallet-card {
-            background: rgba(255,255,255,0.05);
-            padding: 15px;
-            border-radius: 15px;
-            border: 1px solid var(--gold);
-            text-align: center;
-        }
-        .wallet-label { font-size: 0.8rem; color: var(--gold); margin-bottom: 5px; text-transform: uppercase; }
-        .wallet-amount { font-size: 1.2rem; font-weight: 900; }
+        .wallet-display { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 25px; }
+        .wallet-card { background: rgba(255,255,255,0.05); padding: 15px; border-radius: 15px; border: 1px solid var(--gold); text-align: center; }
+        .wallet-label { font-size: 0.8rem; color: var(--gold); margin-bottom: 5px; }
+        .wallet-amount { font-size: 1.1rem; font-weight: 900; }
 
         .form-group { display: flex; flex-direction: column; gap: 12px; margin-bottom: 25px; }
-        input, select { 
-            background: rgba(255,255,255,0.1); 
-            border: 1px solid var(--gold); 
-            padding: 12px; 
-            border-radius: 10px; 
-            color: white; 
-            font-size: 1rem; 
-        }
-        option { background: #111; color: white; }
-
-        button { 
-            background: linear-gradient(45deg, #d4af37, var(--gold)); 
-            color: black; 
-            border: none; 
-            padding: 15px; 
-            border-radius: 10px; 
-            font-family: 'Bangers'; 
-            font-size: 1.2rem; 
-            cursor: pointer; 
-            transition: 0.3s; 
-        }
-        button:hover { transform: scale(1.03); box-shadow: 0 0 20px var(--gold-glow); }
+        input, select { background: rgba(255,255,255,0.1); border: 1px solid var(--gold); padding: 12px; border-radius: 10px; color: white; font-size: 1rem; }
+        
+        button { background: linear-gradient(45deg, #d4af37, var(--gold)); color: black; border: none; padding: 15px; border-radius: 10px; font-family: 'Bangers'; font-size: 1.2rem; cursor: pointer; }
 
         .btn-small { background: transparent; border: 1px solid var(--gold); color: var(--gold); padding: 5px 10px; font-size: 0.7rem; cursor: pointer; border-radius: 5px; }
 
         table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.9rem; }
         td { padding: 12px 8px; border-bottom: 1px solid rgba(255,255,255,0.1); }
-        .currency-tag { font-size: 0.7rem; padding: 2px 5px; border-radius: 4px; margin-right: 5px; }
-        .tag-rp { background: #00529b; color: white; }
-        .tag-thb { background: #c0392b; color: white; }
+        .tag-rp { background: #00529b; color: white; padding: 2px 5px; border-radius: 4px; font-size: 0.7rem; }
+        .tag-thb { background: #c0392b; color: white; padding: 2px 5px; border-radius: 4px; font-size: 0.7rem; }
 
         .gear5-flash { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: white; opacity: 0; pointer-events: none; z-index: 9999; }
         @keyframes flashEffect { 0% { opacity: 0.7; } 100% { opacity: 0; } }
@@ -154,12 +140,18 @@
 </head>
 <body>
 
-<div class="ocean-background">
-    <div class="waves"></div>
-</div>
+<div class="cloud" style="top: 10%; animation-duration: 25s;"></div>
+<div class="cloud" style="top: 20%; animation-duration: 35s; transform: scale(1.5);"></div>
+
 <div class="sunny-go">
-    <img src="https://www.pngplay.com/wp-content/uploads/12/Thousand-Sunny-One-Piece-PNG-Clipart-Background.png" alt="Thousand Sunny">
+    <img src="https://i.ibb.co/Y2S0m6f/sunny.png" alt="Sunny Go" style="width: 100%;">
 </div>
+
+<div class="ocean">
+    <div class="wave"></div>
+    <div class="wave"></div>
+</div>
+
 <div id="gear5Flash" class="gear5-flash"></div>
 
 <div class="container">
@@ -293,7 +285,7 @@
 
             row.innerHTML = `
                 <td>
-                    <span class="currency-tag ${tagClass}">${t.curr}</span>
+                    <span class="${tagClass}">${t.curr}</span>
                     ${t.desc}
                 </td>
                 <td style="text-align:right; color: ${t.amount >= 0 ? '#44ff44' : '#ff4444'}">
