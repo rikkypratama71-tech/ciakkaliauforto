@@ -3,17 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Keuangan Pribadi Fina - Gear 5 Treasure Mode</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&family=Bangers&display=swap" rel="stylesheet">
+    <title>CIAKKALIAU - WEBSITE </title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;900&family=Bangers&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
     <style>
         :root {
             --bg: #0a1f44;
-            --card-bg: rgba(17, 17, 17, 0.9);
-            --text: #e0e0e0;
             --gold: #ffd700;
-            --gold-dark: #d4af37;
-            --gold-light: #ffeb3b;
             --gold-glow: rgba(255, 215, 0, 0.5);
             --red: #c0392b;
         }
@@ -21,93 +17,50 @@
         body {
             font-family: 'Montserrat', sans-serif;
             background: radial-gradient(circle at center, #1a3a6d 0%, #000b1a 100%);
-            color: var(--text);
+            color: #e0e0e0;
             min-height: 100vh;
             margin: 0;
             padding: 20px;
             display: flex;
             justify-content: center;
-            overflow-x: hidden;
         }
 
-        body::after {
-            content: "☁️"; position: fixed; top: 15%; left: -100px; font-size: 80px; opacity: 0.1;
-            animation: floatCloud 30s linear infinite;
-        }
-
-        @keyframes floatCloud { to { left: 110%; } }
-
-        .container { width: 100%; max-width: 600px; z-index: 10; margin-top: 50px; }
-
-        h1 {
-            font-family: 'Bangers', cursive;
-            text-align: center;
-            color: var(--gold);
-            font-size: clamp(2.5rem, 8vw, 4rem);
-            text-shadow: 4px 4px 0 #000, 0 0 20px var(--gold-glow);
-            margin-bottom: 10px;
-        }
+        .container { width: 100%; max-width: 600px; margin-top: 30px; }
 
         #loginPage, #appPage, #settingsPage {
-            background: var(--card-bg);
+            background: rgba(17, 17, 17, 0.9);
             padding: 30px;
             border-radius: 25px;
-            box-shadow: 0 0 50px rgba(0,0,0,0.8), inset 0 0 20px var(--gold-glow);
+            box-shadow: 0 0 40px rgba(0,0,0,0.8), inset 0 0 20px var(--gold-glow);
             border: 3px solid var(--gold);
             backdrop-filter: blur(10px);
         }
 
-        .saldo-container { text-align: center; margin-bottom: 30px; }
-        .saldo {
-            font-size: clamp(3rem, 10vw, 5rem);
-            font-weight: 900;
-            background: linear-gradient(to right, #fff, var(--gold), #fff);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0 0 15px var(--gold-glow));
-        }
+        h1 { font-family: 'Bangers', cursive; text-align: center; color: var(--gold); font-size: 3rem; text-shadow: 3px 3px 0 #000; margin-bottom: 10px; }
+
+        /* Multi-Currency Balance */
+        .balance-box { text-align: center; margin-bottom: 30px; padding: 20px; border-bottom: 2px dashed var(--gold); }
+        .main-balance { font-size: 3rem; font-weight: 900; color: #fff; text-shadow: 0 0 15px var(--gold-glow); margin: 0; }
+        .sub-balance { font-size: 1.5rem; color: var(--gold); opacity: 0.9; margin-top: 5px; }
 
         .form-group { display: flex; flex-direction: column; gap: 15px; margin-bottom: 25px; }
-        input {
-            background: rgba(255,255,255,0.05);
-            border: 2px solid var(--gold-dark);
-            padding: 15px;
-            border-radius: 12px;
-            color: white;
-            font-size: 1rem;
-        }
-
-        button {
-            background: linear-gradient(45deg, var(--gold-dark), var(--gold));
-            color: black;
-            border: none;
-            padding: 15px;
-            border-radius: 12px;
-            font-family: 'Bangers';
-            font-size: 1.3rem;
-            cursor: pointer;
-            transition: 0.3s;
-        }
+        input { background: rgba(255,255,255,0.05); border: 2px solid var(--gold-dark); padding: 15px; border-radius: 12px; color: white; font-size: 1rem; }
+        
+        button { background: linear-gradient(45deg, #d4af37, var(--gold)); color: black; border: none; padding: 15px; border-radius: 12px; font-family: 'Bangers'; font-size: 1.2rem; cursor: pointer; transition: 0.3s; }
         button:hover { transform: scale(1.03); box-shadow: 0 0 20px var(--gold-glow); }
 
-        .btn-secondary {
-            background: transparent;
-            border: 1px solid var(--gold);
-            color: var(--gold);
-            padding: 5px 15px;
-            font-size: 0.8rem;
-            margin-top: 10px;
-        }
+        .logout-row { display: flex; justify-content: space-between; margin-bottom: 15px; }
+        .btn-small { background: transparent; border: 1px solid var(--gold); color: var(--gold); padding: 5px 10px; font-size: 0.8rem; cursor: pointer; }
 
-        table { width: 100%; border-collapse: collapse; }
-        th { color: var(--gold); border-bottom: 2px solid var(--gold); padding: 10px; text-align: left; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
         td { padding: 12px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .amount-idr { font-weight: 600; display: block; }
+        .amount-thb { font-size: 0.8rem; opacity: 0.7; }
 
-        .gear5-flash {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: white; opacity: 0; pointer-events: none; z-index: 9999;
-        }
+        .gear5-flash { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: white; opacity: 0; pointer-events: none; z-index: 9999; }
         @keyframes flashEffect { 0% { opacity: 0.7; } 100% { opacity: 0; } }
+        .gear5-active .main-balance { animation: bounce 0.6s infinite; }
+        @keyframes bounce { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1) rotate(2deg); } }
     </style>
 </head>
 <body>
@@ -116,27 +69,28 @@
 
 <div class="container">
     <div id="loginPage">
-        <h1>CIAKKALIAU SITE</h1>
-        <p style="text-align:center">Masukkan Password !</p>
+        <h1>WELCOME CIAK </h1>
         <div class="form-group">
-            <input type="password" id="passwordInput" placeholder="Gear... Up!">
-            <button onclick="handleLogin()">MASUK</button>
+            <input type="password" id="passwordInput" placeholder="Masukkan Password Joy Boy...">
+            <button onclick="handleLogin()">MASUK </button>
         </div>
+        <p style="text-align: center; font-size: 0.7rem; opacity: 0.5;">Default: luffy</p>
     </div>
 
     <div id="appPage" style="display:none;">
-        <div style="display: flex; justify-content: space-between;">
-            <button class="btn-secondary" onclick="location.reload()">Log Out</button>
-            <button class="btn-secondary" onclick="showSettings()">Pengaturan ⚙️</button>
+        <div class="logout-row">
+            <button class="btn-small" onclick="location.reload()">Log Out</button>
+            <button class="btn-small" onclick="showSettings()">Settings ⚙️</button>
         </div>
         
-        <div class="saldo-container">
-            <div class="saldo">฿ <span id="saldo">0</span></div>
+        <div class="balance-box">
+            <div class="main-balance" id="saldoIDR">Rp 0</div>
+            <div class="sub-balance" id="saldoTHB">฿ 0.00 (Baht)</div>
         </div>
 
         <div class="form-group">
-            <input type="text" id="descInput" placeholder="Catatan (Beli Kapal)">
-            <input type="number" id="amountInput" placeholder="Jumlah Berry">
+            <input type="text" id="descInput" placeholder="Catatan (Beli Ramen)">
+            <input type="number" id="amountInput" placeholder="Jumlah Rupiah (Rp)">
             <button onclick="addTransaction()">GAS!</button>
         </div>
 
@@ -146,32 +100,27 @@
     </div>
 
     <div id="settingsPage" style="display:none;">
-        <h1>PENGATURAN</h1>
-        <p style="text-align: center;">Ubah Password Rahasia Joy Boy</p>
+        <h1>SETTINGS</h1>
         <div class="form-group">
             <input type="password" id="newPassword" placeholder="Password Baru">
             <button onclick="saveNewPassword()">SIMPAN PASSWORD</button>
-            <button class="btn-secondary" onclick="hideSettings()">KEMBALI</button>
+            <button class="btn-small" onclick="hideSettings()">KEMBALI</button>
         </div>
     </div>
 </div>
 
 <script>
-    let transactions = JSON.parse(localStorage.getItem('pirate_finance_fina')) || [];
-    
-    // Ambil password dari storage, kalau belum ada set "luffy"
-    let currentPassword = localStorage.getItem('pirate_pass_fina') || "luffy";
+    let transactions = JSON.parse(localStorage.getItem('fina_finance')) || [];
+    let currentPassword = localStorage.getItem('fina_pass') || "luffy";
+    const KURS_BAHT = 450; // 1 Baht = Rp450
 
     function handleLogin() {
-        const pass = document.getElementById('passwordInput').value.trim();
-        if(pass === currentPassword) {
+        if(document.getElementById('passwordInput').value === currentPassword) {
             document.getElementById('loginPage').style.display = 'none';
             document.getElementById('appPage').style.display = 'block';
             triggerGear5();
             renderApp();
-        } else {
-            alert("Haki lo lemah! Password salah.");
-        }
+        } else { alert("Salah!"); }
     }
 
     function showSettings() {
@@ -185,29 +134,32 @@
     }
 
     function saveNewPassword() {
-        const newPass = document.getElementById('newPassword').value.trim();
-        if(newPass.length < 3) return alert("Password minimal 3 karakter!");
-        
-        localStorage.setItem('pirate_pass_fina', newPass);
-        currentPassword = newPass;
-        alert("Password berhasil diubah! Silakan login ulang.");
-        location.reload();
+        const p = document.getElementById('newPassword').value;
+        if(p) {
+            localStorage.setItem('fina_pass', p);
+            alert("Password diganti! Login ulang.");
+            location.reload();
+        }
     }
 
     function triggerGear5() {
         const flash = document.getElementById('gear5Flash');
         flash.style.animation = 'flashEffect 0.6s ease-out';
-        confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 }, colors: ['#ffffff', '#ffd700'] });
-        setTimeout(() => { flash.style.animation = ''; }, 1000);
+        document.body.classList.add('gear5-active');
+        confetti({ particleCount: 100, colors: ['#ffffff', '#ffd700'] });
+        setTimeout(() => { 
+            flash.style.animation = ''; 
+            document.body.classList.remove('gear5-active');
+        }, 1000);
     }
 
     function addTransaction() {
         const desc = document.getElementById('descInput').value;
         const amount = parseInt(document.getElementById('amountInput').value);
-        if(!desc || isNaN(amount)) return alert("Isi yang bener!");
+        if(!desc || isNaN(amount)) return;
 
         transactions.push({ id: Date.now(), desc, amount });
-        localStorage.setItem('pirate_finance_fina', JSON.stringify(transactions));
+        localStorage.setItem('fina_finance', JSON.stringify(transactions));
         if(amount > 0) triggerGear5();
         document.getElementById('descInput').value = '';
         document.getElementById('amountInput').value = '';
@@ -216,7 +168,7 @@
 
     function deleteTransaction(id) {
         transactions = transactions.filter(t => t.id !== id);
-        localStorage.setItem('pirate_finance_fina', JSON.stringify(transactions));
+        localStorage.setItem('fina_finance', JSON.stringify(transactions));
         renderApp();
     }
 
@@ -224,17 +176,24 @@
         const list = document.getElementById('transactionList');
         let total = 0;
         list.innerHTML = '';
+        
         transactions.forEach(t => {
             total += t.amount;
+            const thbValue = (t.amount / KURS_BAHT).toFixed(2);
             const row = document.createElement('tr');
             row.innerHTML = `
                 <td>${t.desc}</td>
-                <td style="color: ${t.amount >= 0 ? '#44ff44' : '#ff4444'}">${t.amount.toLocaleString()} ฿</td>
+                <td style="color: ${t.amount >= 0 ? '#44ff44' : '#ff4444'}">
+                    <span class="amount-idr">${t.amount >= 0 ? '+' : ''}${t.amount.toLocaleString()} Rp</span>
+                    <span class="amount-thb">฿ ${thbValue}</span>
+                </td>
                 <td><button style="padding:5px; font-size:10px" onclick="deleteTransaction(${t.id})">X</button></td>
             `;
             list.appendChild(row);
         });
-        document.getElementById('saldo').innerText = total.toLocaleString();
+
+        document.getElementById('saldoIDR').innerText = "Rp " + total.toLocaleString();
+        document.getElementById('saldoTHB').innerText = "฿ " + (total / KURS_BAHT).toFixed(2) + " (Baht)";
     }
 </script>
 </body>
