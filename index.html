@@ -13,20 +13,80 @@
             --gold-glow: rgba(255, 215, 0, 0.5);
             --red: #c0392b;
             --card-bg: rgba(17, 17, 17, 0.9);
+            --ocean-blue: #0077be;
+            --dark-ocean: #004d7c;
         }
 
         body {
             font-family: 'Montserrat', sans-serif;
-            background: radial-gradient(circle at center, #1a3a6d 0%, #000b1a 100%);
+            background: linear-gradient(to bottom, #4a90e2, #2c5ba6); /* Warna langit */
             color: #e0e0e0;
             min-height: 100vh;
             margin: 0;
             padding: 20px;
             display: flex;
             justify-content: center;
+            overflow: hidden; /* Penting untuk animasi background */
+            position: relative; /* Untuk positioning elemen background */
         }
 
-        .container { width: 100%; max-width: 600px; margin-top: 20px; }
+        /* Background Animasi Laut */
+        .ocean-background {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 40%; /* Tinggi laut */
+            background: linear-gradient(to top, var(--dark-ocean), var(--ocean-blue));
+            z-index: 0; /* Pastikan di belakang konten */
+        }
+
+        .waves {
+            position: absolute;
+            top: -20px; /* Sedikit di atas garis laut */
+            left: 0;
+            width: 200%; /* Lebih lebar dari layar */
+            height: 40px;
+            background: url('https://i.imgur.com/kS5Y2wI.png') repeat-x; /* Contoh gambar ombak transparan */
+            animation: waveMotion 15s linear infinite;
+        }
+
+        @keyframes waveMotion {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        /* Animasi Kapal Sunny Go */
+        .sunny-go {
+            position: absolute;
+            bottom: 15%; /* Posisi kapal di atas laut */
+            left: -250px; /* Mulai dari luar layar kiri */
+            width: 200px; /* Ukuran kapal */
+            z-index: 1; /* Di atas laut, di bawah konten utama */
+            animation: sailAcross 40s linear infinite; /* Animasi bergerak */
+            filter: drop-shadow(5px 5px 5px rgba(0,0,0,0.4));
+        }
+
+        .sunny-go img {
+            width: 100%;
+            height: auto;
+        }
+
+        @keyframes sailAcross {
+            0% { left: -250px; transform: translateY(0); }
+            25% { transform: translateY(-10px); }
+            50% { transform: translateY(0); }
+            75% { transform: translateY(-10px); }
+            100% { left: 120%; transform: translateY(0); }
+        }
+
+        .container { 
+            width: 100%; 
+            max-width: 600px; 
+            margin-top: 20px; 
+            position: relative; /* Penting agar container tetap di atas background */
+            z-index: 2; /* Pastikan di atas semua animasi background */
+        }
 
         #loginPage, #appPage, #settingsPage {
             background: var(--card-bg);
@@ -94,11 +154,17 @@
 </head>
 <body>
 
+<div class="ocean-background">
+    <div class="waves"></div>
+</div>
+<div class="sunny-go">
+    <img src="https://www.pngplay.com/wp-content/uploads/12/Thousand-Sunny-One-Piece-PNG-Clipart-Background.png" alt="Thousand Sunny">
+</div>
 <div id="gear5Flash" class="gear5-flash"></div>
 
 <div class="container">
     <div id="loginPage">
-        <h1>GEAR 5 BANK</h1>
+        <h1>KEUANGAN FINA</h1>
         <div class="form-group">
             <input type="password" id="passwordInput" placeholder="Password Rahasia...">
             <button onclick="handleLogin()">BANGKIT! ⚡</button>
@@ -217,7 +283,6 @@
         let totalTHB = 0;
         list.innerHTML = '';
         
-        // Render dari data terbaru ke atas
         [...transactions].reverse().forEach(t => {
             if(t.curr === "IDR") totalIDR += t.amount;
             else totalTHB += t.amount;
