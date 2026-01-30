@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Keuangan Fina - Black Gold Edition</title>
+    <title>Keuangan Fina - Black Gold Treasury</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&family=Bangers&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
     <style>
@@ -18,10 +18,8 @@
         body {
             font-family: 'Montserrat', sans-serif;
             background-color: var(--black-deep);
-            /* Tekstur Peta Tua Statis */
-            background-image: 
-                linear-gradient(rgba(10, 10, 10, 0.9), rgba(10, 10, 10, 0.9)),
-                url('https://www.transparenttextures.com/patterns/old-map.png');
+            background-image: linear-gradient(rgba(10, 10, 10, 0.9), rgba(10, 10, 10, 0.9)),
+                              url('https://www.transparenttextures.com/patterns/old-map.png');
             color: white;
             min-height: 100vh;
             margin: 0;
@@ -30,11 +28,7 @@
             align-items: center;
         }
 
-        .container {
-            width: 90%;
-            max-width: 500px;
-            padding: 20px;
-        }
+        .container { width: 90%; max-width: 500px; padding: 20px; position: relative; }
 
         #loginPage, #appPage {
             background: var(--black-card);
@@ -42,7 +36,6 @@
             border-radius: 15px;
             border: 2px solid var(--gold);
             box-shadow: 0 0 30px rgba(212, 175, 55, 0.2);
-            position: relative;
         }
 
         h1 {
@@ -50,89 +43,51 @@
             color: var(--gold-light);
             text-align: center;
             font-size: 3rem;
-            letter-spacing: 3px;
-            margin: 0 0 10px 0;
+            margin: 0;
             text-shadow: 2px 2px 0px #000;
         }
 
-        .subtitle {
-            text-align: center;
-            font-size: 0.8rem;
-            color: var(--gold);
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            margin-bottom: 30px;
-        }
+        .subtitle { text-align: center; font-size: 0.7rem; color: var(--gold); letter-spacing: 2px; margin-bottom: 25px; }
 
-        /* Wallet Section */
-        .wallet-container {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            margin-bottom: 25px;
-        }
+        /* Wallet Cards */
+        .wallet-container { display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px; }
+        .wallet-box { background: rgba(255, 255, 255, 0.03); border-left: 4px solid var(--gold); padding: 12px; border-radius: 4px; }
+        .label { font-size: 0.65rem; color: var(--gold); font-weight: bold; }
+        .amount { font-size: 1.5rem; font-weight: 900; }
 
-        .wallet-box {
-            background: rgba(255, 255, 255, 0.03);
-            border-left: 4px solid var(--gold);
-            padding: 15px;
-            border-radius: 5px;
-        }
-
-        .label { font-size: 0.7rem; color: var(--gold); font-weight: bold; margin-bottom: 5px; }
-        .amount { font-size: 1.6rem; font-weight: 900; letter-spacing: 1px; }
-
-        /* Form Styling */
-        .input-group { margin-bottom: 15px; }
-        
+        /* Form Elements */
         input, select {
-            width: 100%;
-            padding: 12px;
-            background: #1a1a1a;
-            border: 1px solid #333;
-            border-radius: 5px;
-            color: white;
-            font-size: 1rem;
-            box-sizing: border-box;
-            transition: 0.3s;
+            width: 100%; padding: 12px; background: #1a1a1a; border: 1px solid #333;
+            border-radius: 5px; color: white; margin-bottom: 10px; box-sizing: border-box;
         }
-
-        input:focus { border-color: var(--gold); outline: none; background: #222; }
+        input:focus { border-color: var(--gold); outline: none; }
 
         button {
-            width: 100%;
-            padding: 15px;
-            background: linear-gradient(45deg, var(--gold), #f9e29c);
-            border: none;
-            border-radius: 5px;
-            color: black;
-            font-family: 'Bangers';
-            font-size: 1.4rem;
-            cursor: pointer;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-            transition: 0.3s;
+            width: 100%; padding: 15px; background: linear-gradient(45deg, var(--gold), #f9e29c);
+            border: none; border-radius: 5px; color: black; font-family: 'Bangers';
+            font-size: 1.3rem; cursor: pointer; transition: 0.3s;
         }
+        button:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(212, 175, 55, 0.4); }
 
-        button:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(212, 175, 55, 0.4); }
-
-        /* History Table */
-        .history-section {
-            margin-top: 30px;
-            max-height: 200px;
-            overflow-y: auto;
-        }
-
-        table { width: 100%; border-collapse: collapse; }
-        td { padding: 12px 8px; border-bottom: 1px solid #222; font-size: 0.85rem; }
-        .txt-gold { color: var(--gold-light); font-weight: bold; }
+        /* History */
+        .history-section { margin-top: 20px; max-height: 180px; overflow-y: auto; }
+        table { width: 100%; }
+        td { padding: 8px; border-bottom: 1px solid #222; font-size: 0.8rem; }
         
-        .btn-delete { color: #555; cursor: pointer; border: none; background: none; font-size: 0.7rem; }
-        .btn-delete:hover { color: #ff4444; }
+        /* Settings Overlay */
+        #settingsModal {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.9); z-index: 100; justify-content: center; align-items: center;
+        }
+        .modal-content {
+            background: var(--black-card); padding: 30px; border: 2px solid var(--gold);
+            border-radius: 10px; width: 80%; max-width: 350px; text-align: center;
+        }
 
-        /* Scrollbar */
-        ::-webkit-scrollbar { width: 5px; }
-        ::-webkit-scrollbar-track { background: #111; }
-        ::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 10px; }
+        .settings-trigger {
+            position: fixed; bottom: 20px; right: 20px; background: none; border: 1px solid var(--gold);
+            color: var(--gold); border-radius: 50%; width: 45px; height: 45px; cursor: pointer; font-size: 1.2rem;
+        }
     </style>
 </head>
 <body>
@@ -140,75 +95,86 @@
 <div class="container">
     <div id="loginPage">
         <h1>GEAR 5 BANK</h1>
-        <div class="subtitle">Secure Treasure Storage</div>
-        <div class="input-group">
-            <input type="password" id="passwordInput" placeholder="ENTER ACCESS CODE...">
-        </div>
-        <button onclick="handleLogin()">AUTHENTICATE ☠️</button>
+        <div class="subtitle">PRIVATE VAULT</div>
+        <input type="password" id="passwordInput" placeholder="ENTER ACCESS CODE...">
+        <button onclick="handleLogin()">AUTHENTICATE</button>
     </div>
 
     <div id="appPage" style="display:none;">
         <h1>TREASURY</h1>
-        <div class="subtitle">Financial Log System</div>
+        <div class="subtitle">FINA'S WEALTH LOG</div>
         
         <div class="wallet-container">
             <div class="wallet-box">
-                <div class="label">IDR BALANCE (RUPIAH)</div>
+                <div class="label">IDR BALANCE</div>
                 <div class="amount" id="saldoIDR">Rp 0</div>
             </div>
             <div class="wallet-box">
-                <div class="label">THB BALANCE (BAHT)</div>
+                <div class="label">THB BALANCE</div>
                 <div class="amount" id="saldoTHB">฿ 0</div>
             </div>
         </div>
 
-        <div class="input-group">
-            <input type="text" id="descInput" placeholder="Transaction description...">
-        </div>
-        <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+        <input type="text" id="descInput" placeholder="Description...">
+        <div style="display: flex; gap: 8px;">
             <input type="number" id="amountInput" placeholder="Amount" style="flex: 2;">
             <select id="currencySelect" style="flex: 1;">
-                <option value="IDR">IDR (Rp)</option>
-                <option value="THB">THB (฿)</option>
+                <option value="IDR">IDR</option>
+                <option value="THB">THB</option>
             </select>
         </div>
         <button onclick="addTransaction()">LOG TRANSACTION</button>
 
-        <div class="history-section">
-            <table id="list"></table>
-        </div>
+        <div class="history-section"><table id="list"></table></div>
         
-        <p style="text-align: center; margin-top: 20px;">
-            <button onclick="location.reload()" style="background: none; color: #555; font-size: 0.7rem; padding: 5px;">Secure Logout</button>
-        </p>
+        <button onclick="toggleSettings()" class="settings-trigger">⚙️</button>
+    </div>
+</div>
+
+<div id="settingsModal">
+    <div class="modal-content">
+        <h2 style="font-family: 'Bangers'; color: var(--gold);">Ganti Sandi</h2>
+        <input type="password" id="newPassInput" placeholder="Masukkan Sandi Baru">
+        <button onclick="saveNewPass()" style="margin-bottom: 10px;">Simpan Sandi</button>
+        <button onclick="toggleSettings()" style="background: none; color: white; border: 1px solid white; font-size: 1rem;">Batal</button>
     </div>
 </div>
 
 <script>
     let transactions = JSON.parse(localStorage.getItem('fina_gold_data')) || [];
-    let savedPass = localStorage.getItem('fina_p') || "luffy";
+    let currentPass = localStorage.getItem('fina_secure_pass') || "luffy";
 
     function handleLogin() {
-        if(document.getElementById('passwordInput').value === savedPass) {
+        if(document.getElementById('passwordInput').value === currentPass) {
             document.getElementById('loginPage').style.display = 'none';
             document.getElementById('appPage').style.display = 'block';
-            confetti({ particleCount: 50, colors: ['#D4AF37', '#ffffff'] });
+            confetti({ particleCount: 60, colors: ['#D4AF37'] });
             render();
-        } else {
-            alert("ACCESS DENIED: Weak Haki detected.");
-        }
+        } else { alert("Akses Ditolak! Haki lo kurang kuat."); }
+    }
+
+    function toggleSettings() {
+        const modal = document.getElementById('settingsModal');
+        modal.style.display = (modal.style.display === 'flex') ? 'none' : 'flex';
+    }
+
+    function saveNewPass() {
+        const newPass = document.getElementById('newPassInput').value.trim();
+        if(newPass.length < 3) return alert("Sandi minimal 3 karakter!");
+        localStorage.setItem('fina_secure_pass', newPass);
+        currentPass = newPass;
+        alert("Sandi berhasil diubah! Gunakan sandi baru nanti.");
+        toggleSettings();
     }
 
     function addTransaction() {
         const desc = document.getElementById('descInput').value;
         const amount = parseInt(document.getElementById('amountInput').value);
         const curr = document.getElementById('currencySelect').value;
-
         if(!desc || isNaN(amount)) return;
 
         transactions.push({ id: Date.now(), desc, amount, curr });
         localStorage.setItem('fina_gold_data', JSON.stringify(transactions));
-        
         document.getElementById('descInput').value = '';
         document.getElementById('amountInput').value = '';
         render();
@@ -222,31 +188,22 @@
 
     function render() {
         let idr = 0, thb = 0, html = '';
-        const list = document.getElementById('list');
-        
         [...transactions].reverse().forEach(t => {
             if(t.curr === "IDR") idr += t.amount; else thb += t.amount;
-            
-            html += `
-                <tr>
-                    <td style="color: #888;">${t.desc}</td>
-                    <td class="txt-gold" style="text-align: right;">
-                        <span style="color:${t.amount >= 0 ? 'lime':'#ff4444'}">
-                            ${t.amount.toLocaleString()} ${t.curr === "IDR" ? 'Rp' : '฿'}
-                        </span>
-                    </td>
-                    <td style="width: 20px; text-align: right;">
-                        <button class="btn-delete" onclick="deleteTx(${t.id})">✕</button>
-                    </td>
-                </tr>
-            `;
+            html += `<tr>
+                <td style="color: #888;">${t.desc}</td>
+                <td style="text-align: right; color: ${t.amount >= 0 ? 'lime' : '#ff4444'}">
+                    ${t.amount.toLocaleString()} ${t.curr === "IDR" ? 'Rp' : '฿'}
+                </td>
+                <td style="width: 20px; text-align: right;">
+                    <span onclick="deleteTx(${t.id})" style="cursor:pointer; color:#444;">✕</span>
+                </td>
+            </tr>`;
         });
-
         document.getElementById('saldoIDR').innerText = "Rp " + idr.toLocaleString();
         document.getElementById('saldoTHB').innerText = "฿ " + thb.toLocaleString();
-        list.innerHTML = html;
+        document.getElementById('list').innerHTML = html;
     }
 </script>
-
 </body>
 </html>
