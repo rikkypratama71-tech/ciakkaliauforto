@@ -14,6 +14,7 @@
             --black-card: #1a1a1a;
             --success: #00ff88;
             --danger: #ff4d4d;
+            --logout: #ff8800;
         }
 
         body {
@@ -87,20 +88,22 @@
         table { width: 100%; border-collapse: collapse; }
         td { padding: 12px 10px; border-bottom: 1px solid #222; font-size: 0.85rem; }
 
-        /* Settings */
+        /* Modal & Settings */
         #settingsModal {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.95); z-index: 100; justify-content: center; align-items: center;
         }
         .modal-content {
             background: #1a1a1a; padding: 30px; border: 1px solid var(--gold);
-            border-radius: 15px; width: 85%; max-width: 320px;
+            border-radius: 15px; width: 85%; max-width: 320px; text-align: center;
         }
 
         .settings-trigger {
             position: fixed; bottom: 20px; right: 20px; background: #222; border: 1px solid var(--gold);
-            color: var(--gold); border-radius: 50%; width: 50px; height: 50px; cursor: pointer;
+            color: var(--gold); border-radius: 50%; width: 50px; height: 50px; cursor: pointer; font-size: 1.2rem;
         }
+
+        .btn-modal { width: 100%; padding: 12px; border-radius: 5px; border: none; font-weight: bold; cursor: pointer; margin-bottom: 10px; font-family: 'Montserrat'; }
     </style>
 </head>
 <body>
@@ -111,7 +114,7 @@
         <div class="subtitle">Secure Vault</div>
         <input type="password" id="passwordInput" placeholder="ACCESS CODE...">
         <button onclick="handleLogin()" style="width:100%; padding:15px; background:var(--gold); border:none; border-radius:8px; font-family:'Bangers'; font-size:1.5rem; cursor:pointer;">UNLOCK</button>
-        <p style="text-align:center; font-size:0.6rem; color:#444; margin-top:20px;">Hint: 1234</p>
+        <p style="text-align:center; font-size:0.6rem; color:#444; margin-top:20px;">Default Code: 1234</p>
     </div>
 
     <div id="appPage" style="display:none;">
@@ -153,20 +156,27 @@
 
 <div id="settingsModal">
     <div class="modal-content">
-        <h2 style="font-family: 'Bangers'; color: var(--gold); margin-top:0;">Settings</h2>
-        <input type="password" id="newPassInput" placeholder="Sandi Baru">
-        <button onclick="saveNewPass()" style="width:100%; padding:12px; background:var(--gold); border:none; border-radius:5px; margin-bottom:10px; font-weight:bold;">Update Sandi</button>
-        <button onclick="clearData()" style="width:100%; padding:10px; background:none; border:1px solid var(--danger); color:var(--danger); border-radius:5px; margin-bottom:10px;">Hapus Semua Data</button>
-        <button onclick="toggleSettings()" style="width:100%; background:none; color:#888; border:none; cursor:pointer;">Tutup</button>
+        <h2 style="font-family: 'Bangers'; color: var(--gold); margin-top:0; letter-spacing: 2px;">Vault Settings</h2>
+        
+        <input type="password" id="newPassInput" placeholder="Ganti Sandi Baru">
+        <button class="btn-modal" onclick="saveNewPass()" style="background: var(--gold); color: black;">UPDATE SANDI</button>
+        
+        <button class="btn-modal" onclick="logout()" style="background: var(--logout); color: black;">LOGOUT 🚪</button>
+        
+        <button class="btn-modal" onclick="clearData()" style="background: none; border: 1px solid var(--danger); color: var(--danger); font-size: 0.7rem;">HAPUS SEMUA DATA</button>
+        
+        <button onclick="toggleSettings()" style="background: none; color: #555; border: none; cursor: pointer; margin-top: 10px; font-size: 0.8rem;">KEMBALI</button>
     </div>
 </div>
 
 <script>
-    // Reset password ke "1234" jika lupa (hapus baris ini setelah berhasil login sekali)
-    // localStorage.setItem('fina_secure_pass', '1234'); 
+    // Reset password ke "1234" untuk bantuan user
+    if(!localStorage.getItem('fina_secure_pass')) {
+        localStorage.setItem('fina_secure_pass', '1234');
+    }
 
     let transactions = JSON.parse(localStorage.getItem('fina_gold_data')) || [];
-    let currentPass = localStorage.getItem('fina_secure_pass') || "1234";
+    let currentPass = localStorage.getItem('fina_secure_pass');
 
     function handleLogin() {
         const input = document.getElementById('passwordInput').value;
@@ -180,6 +190,13 @@
         }
     }
 
+    function logout() {
+        document.getElementById('appPage').style.display = 'none';
+        document.getElementById('loginPage').style.display = 'block';
+        document.getElementById('passwordInput').value = '';
+        toggleSettings();
+    }
+
     function addTransaction(type) {
         const desc = document.getElementById('descInput').value;
         let amount = parseInt(document.getElementById('amountInput').value);
@@ -187,7 +204,6 @@
 
         if(!desc || isNaN(amount)) return alert("Isi data dengan benar!");
         
-        // Jika pengeluaran, ubah angka jadi negatif
         if(type === 'out') amount = -Math.abs(amount);
         else amount = Math.abs(amount);
 
@@ -209,13 +225,10 @@
 
     function render() {
         let idr = 0, thb = 0, html = '';
-        
         [...transactions].reverse().forEach(t => {
             if(t.curr === "IDR") idr += t.amount; else thb += t.amount;
-            
             const color = t.amount >= 0 ? 'var(--success)' : 'var(--danger)';
             const sign = t.amount >= 0 ? '+' : '';
-            
             html += `<tr>
                 <td>
                     <div style="font-weight:bold; color:white;">${t.desc}</div>
@@ -229,27 +242,30 @@
                 </td>
             </tr>`;
         });
-
         document.getElementById('saldoIDR').innerText = "Rp " + idr.toLocaleString();
         document.getElementById('saldoTHB').innerText = "฿ " + thb.toLocaleString();
         document.getElementById('list').innerHTML = html || '<tr><td colspan="3" style="text-align:center; color:#444; padding:20px;">Belum ada catatan.</td></tr>';
     }
 
     function saveData() { localStorage.setItem('fina_gold_data', JSON.stringify(transactions)); }
+    
     function toggleSettings() {
         const m = document.getElementById('settingsModal');
         m.style.display = (m.style.display === 'flex') ? 'none' : 'flex';
     }
+
     function saveNewPass() {
         const p = document.getElementById('newPassInput').value.trim();
-        if(p.length < 3) return alert("Sandi terlalu pendek!");
+        if(p.length < 3) return alert("Sandi minimal 3 karakter!");
         localStorage.setItem('fina_secure_pass', p);
         currentPass = p;
-        alert("Sandi diperbarui!");
+        alert("Sandi diperbarui! Gunakan sandi ini saat login nanti.");
+        document.getElementById('newPassInput').value = '';
         toggleSettings();
     }
+
     function clearData() {
-        if(confirm("Hapus semua riwayat keuangan? Data tidak bisa kembali!")) {
+        if(confirm("Hapus semua riwayat? Data akan hilang permanen!")) {
             transactions = [];
             saveData();
             render();
