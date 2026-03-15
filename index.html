@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CIAKKALIAU - Treasury V2</title>
+    <title>CIAKKALIAU - DATALIST</title>
 
     <link rel="manifest" href="manifest.json">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -118,15 +118,15 @@
 <div class="container">
     <div id="loginPage">
         <h1>CIAKKALIAU</h1>
-        <div class="subtitle">Secure Vault</div>
+        <div class="subtitle">please enter password</div>
         <input type="password" id="passwordInput" placeholder="ACCESS CODE...">
-        <button onclick="handleLogin()" style="width:100%; padding:15px; background:var(--gold); border:none; border-radius:8px; font-family:'Bangers'; font-size:1.5rem; cursor:pointer;">UNLOCK</button>
-        <p style="text-align:center; font-size:0.6rem; color:#444; margin-top:20px;">Default Code: 1234</p>
+        <button onclick="handleLogin()" style="width:100%; padding:15px; background:var(--gold); border:none; border-radius:8px; font-family:'Bangers'; font-size:1.5rem; cursor:pointer;">WELCOME</button>
+        <p style="text-align:center; font-size:0.6rem; color:#444; margin-top:20px;">Secure Vault</p>
     </div>
 
     <div id="appPage" style="display:none;">
-        <h1>TREASURY</h1>
-        <div class="subtitle">Wealth Tracker</div>
+        <h1>WEALTH ANALYSIS</h1>
+        <div class="subtitle">My Wealth </div>
         
         <div class="wallet-container">
             <div class="wallet-box">
@@ -139,7 +139,7 @@
             </div>
         </div>
 
-        <input type="text" id="descInput" placeholder="Keterangan (misal: Jual Akun)">
+        <input type="text" id="descInput" placeholder="Keterangan ">
         <div style="display: flex; gap: 8px;">
             <input type="number" id="amountInput" placeholder="Nominal" style="flex: 2;">
             <select id="currencySelect" style="flex: 1;">
@@ -168,7 +168,7 @@
         <input type="password" id="newPassInput" placeholder="Ganti Sandi Baru">
         <button class="btn-modal" onclick="saveNewPass()" style="background: var(--gold); color: black;">UPDATE SANDI</button>
         
-        <button class="btn-modal" onclick="logout()" style="background: var(--logout); color: black;">LOGOUT 🚪</button>
+        <button class="btn-modal" onclick="logout()" style="background: var(--logout); color: black;">LOGOUT </button>
         
         <button class="btn-modal" onclick="clearData()" style="background: none; border: 1px solid var(--danger); color: var(--danger); font-size: 0.7rem;">HAPUS SEMUA DATA</button>
         
@@ -199,7 +199,7 @@
             confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 }, colors: ['#D4AF37', '#FFFFFF'] });
             render();
         } else {
-            alert("Haki lo kurang kuat! Akses ditolak.");
+            alert("don't try to break in! Access denied.");
         }
     }
 
