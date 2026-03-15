@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CIAKKALIAU - Treasury</title>
+    <title>CIAKKALIAU - Treasury V2</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&family=Bangers&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
     <style>
@@ -11,15 +11,15 @@
             --gold: #D4AF37;
             --gold-light: #FFD700;
             --black-deep: #0a0a0a;
-            --black-card: #141414;
-            --text-gray: #b0b0b0;
+            --black-card: #1a1a1a;
+            --success: #00ff88;
+            --danger: #ff4d4d;
         }
 
         body {
             font-family: 'Montserrat', sans-serif;
             background-color: var(--black-deep);
-            background-image: linear-gradient(rgba(10, 10, 10, 0.9), rgba(10, 10, 10, 0.9)),
-                              url('https://www.transparenttextures.com/patterns/old-map.png');
+            background-image: radial-gradient(circle at center, #222 0%, #0a0a0a 100%);
             color: white;
             min-height: 100vh;
             margin: 0;
@@ -28,65 +28,78 @@
             align-items: center;
         }
 
-        .container { width: 90%; max-width: 500px; padding: 20px; position: relative; }
+        .container { width: 95%; max-width: 450px; padding: 15px; }
 
         #loginPage, #appPage {
             background: var(--black-card);
-            padding: 40px 30px;
-            border-radius: 15px;
-            border: 2px solid var(--gold);
-            box-shadow: 0 0 30px rgba(212, 175, 55, 0.2);
+            padding: 30px;
+            border-radius: 20px;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
         }
 
         h1 {
             font-family: 'Bangers', cursive;
             color: var(--gold-light);
             text-align: center;
-            font-size: 3rem;
+            font-size: 3.5rem;
             margin: 0;
-            text-shadow: 2px 2px 0px #000;
+            letter-spacing: 2px;
         }
 
-        .subtitle { text-align: center; font-size: 0.7rem; color: var(--gold); letter-spacing: 2px; margin-bottom: 25px; }
+        .subtitle { text-align: center; font-size: 0.75rem; color: var(--gold); letter-spacing: 4px; margin-bottom: 30px; text-transform: uppercase; }
 
         /* Wallet Cards */
-        .wallet-container { display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px; }
-        .wallet-box { background: rgba(255, 255, 255, 0.03); border-left: 4px solid var(--gold); padding: 12px; border-radius: 4px; }
-        .label { font-size: 0.65rem; color: var(--gold); font-weight: bold; }
-        .amount { font-size: 1.5rem; font-weight: 900; }
+        .wallet-container { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 25px; }
+        .wallet-box { 
+            background: rgba(255, 255, 255, 0.05); 
+            padding: 15px; 
+            border-radius: 12px; 
+            border-bottom: 3px solid var(--gold);
+            backdrop-filter: blur(5px);
+        }
+        .label { font-size: 0.6rem; color: var(--gold); font-weight: bold; margin-bottom: 5px; }
+        .amount { font-size: 1.1rem; font-weight: 900; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-        /* Form Elements */
+        /* Form */
         input, select {
-            width: 100%; padding: 12px; background: #1a1a1a; border: 1px solid #333;
-            border-radius: 5px; color: white; margin-bottom: 10px; box-sizing: border-box;
+            width: 100%; padding: 14px; background: #000; border: 1px solid #333;
+            border-radius: 8px; color: white; margin-bottom: 12px; box-sizing: border-box;
+            font-family: 'Montserrat';
         }
-        input:focus { border-color: var(--gold); outline: none; }
-
-        button {
-            width: 100%; padding: 15px; background: linear-gradient(45deg, var(--gold), #f9e29c);
-            border: none; border-radius: 5px; color: black; font-family: 'Bangers';
-            font-size: 1.3rem; cursor: pointer; transition: 0.3s;
-        }
-        button:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(212, 175, 55, 0.4); }
-
-        /* History */
-        .history-section { margin-top: 20px; max-height: 180px; overflow-y: auto; }
-        table { width: 100%; }
-        td { padding: 8px; border-bottom: 1px solid #222; font-size: 0.8rem; }
         
-        /* Settings Overlay */
+        .btn-group { display: flex; gap: 10px; margin-bottom: 20px; }
+        .btn-log {
+            flex: 1; padding: 15px; border: none; border-radius: 8px; 
+            font-family: 'Bangers'; font-size: 1.2rem; cursor: pointer; transition: 0.2s;
+        }
+        .btn-plus { background: var(--success); color: #00331a; }
+        .btn-minus { background: var(--danger); color: #330000; }
+        
+        /* History */
+        .history-section { 
+            margin-top: 20px; 
+            max-height: 250px; 
+            overflow-y: auto; 
+            background: rgba(0,0,0,0.2);
+            border-radius: 10px;
+        }
+        table { width: 100%; border-collapse: collapse; }
+        td { padding: 12px 10px; border-bottom: 1px solid #222; font-size: 0.85rem; }
+
+        /* Settings */
         #settingsModal {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.9); z-index: 100; justify-content: center; align-items: center;
+            background: rgba(0,0,0,0.95); z-index: 100; justify-content: center; align-items: center;
         }
         .modal-content {
-            background: var(--black-card); padding: 30px; border: 2px solid var(--gold);
-            border-radius: 10px; width: 80%; max-width: 350px; text-align: center;
+            background: #1a1a1a; padding: 30px; border: 1px solid var(--gold);
+            border-radius: 15px; width: 85%; max-width: 320px;
         }
 
         .settings-trigger {
-            position: fixed; bottom: 20px; right: 20px; background: none; border: 1px solid var(--gold);
-            color: var(--gold); border-radius: 50%; width: 45px; height: 45px; cursor: pointer; font-size: 1.2rem;
+            position: fixed; bottom: 20px; right: 20px; background: #222; border: 1px solid var(--gold);
+            color: var(--gold); border-radius: 50%; width: 50px; height: 50px; cursor: pointer;
         }
     </style>
 </head>
@@ -95,14 +108,15 @@
 <div class="container">
     <div id="loginPage">
         <h1>CIAKKALIAU</h1>
-        <div class="subtitle">PRIVATE VAULT</div>
-        <input type="password" id="passwordInput" placeholder="ENTER ACCESS CODE...">
-        <button onclick="handleLogin()">MASUK</button>
+        <div class="subtitle">Secure Vault</div>
+        <input type="password" id="passwordInput" placeholder="ACCESS CODE...">
+        <button onclick="handleLogin()" style="width:100%; padding:15px; background:var(--gold); border:none; border-radius:8px; font-family:'Bangers'; font-size:1.5rem; cursor:pointer;">UNLOCK</button>
+        <p style="text-align:center; font-size:0.6rem; color:#444; margin-top:20px;">Hint: 1234</p>
     </div>
 
     <div id="appPage" style="display:none;">
         <h1>TREASURY</h1>
-        <div class="subtitle">CIAK'S WEALTH LOG</div>
+        <div class="subtitle">Wealth Tracker</div>
         
         <div class="wallet-container">
             <div class="wallet-box">
@@ -115,17 +129,23 @@
             </div>
         </div>
 
-        <input type="text" id="descInput" placeholder="Description...">
+        <input type="text" id="descInput" placeholder="Keterangan (misal: Jual Akun)">
         <div style="display: flex; gap: 8px;">
-            <input type="number" id="amountInput" placeholder="Amount" style="flex: 2;">
+            <input type="number" id="amountInput" placeholder="Nominal" style="flex: 2;">
             <select id="currencySelect" style="flex: 1;">
                 <option value="IDR">IDR</option>
                 <option value="THB">THB</option>
             </select>
         </div>
-        <button onclick="addTransaction()">LOG TRANSACTION</button>
 
-        <div class="history-section"><table id="list"></table></div>
+        <div class="btn-group">
+            <button class="btn-log btn-plus" onclick="addTransaction('in')">MASUK (+)</button>
+            <button class="btn-log btn-minus" onclick="addTransaction('out')">KELUAR (-)</button>
+        </div>
+
+        <div class="history-section">
+            <table id="list"></table>
+        </div>
         
         <button onclick="toggleSettings()" class="settings-trigger">⚙️</button>
     </div>
@@ -133,76 +153,108 @@
 
 <div id="settingsModal">
     <div class="modal-content">
-        <h2 style="font-family: 'Bangers'; color: var(--gold);">Ganti Sandi</h2>
-        <input type="password" id="newPassInput" placeholder="Masukkan Sandi Baru">
-        <button onclick="saveNewPass()" style="margin-bottom: 10px;">Simpan Sandi</button>
-        <button onclick="toggleSettings()" style="background: none; color: white; border: 1px solid white; font-size: 1rem;">Batal</button>
+        <h2 style="font-family: 'Bangers'; color: var(--gold); margin-top:0;">Settings</h2>
+        <input type="password" id="newPassInput" placeholder="Sandi Baru">
+        <button onclick="saveNewPass()" style="width:100%; padding:12px; background:var(--gold); border:none; border-radius:5px; margin-bottom:10px; font-weight:bold;">Update Sandi</button>
+        <button onclick="clearData()" style="width:100%; padding:10px; background:none; border:1px solid var(--danger); color:var(--danger); border-radius:5px; margin-bottom:10px;">Hapus Semua Data</button>
+        <button onclick="toggleSettings()" style="width:100%; background:none; color:#888; border:none; cursor:pointer;">Tutup</button>
     </div>
 </div>
 
 <script>
+    // Reset password ke "1234" jika lupa (hapus baris ini setelah berhasil login sekali)
+    // localStorage.setItem('fina_secure_pass', '1234'); 
+
     let transactions = JSON.parse(localStorage.getItem('fina_gold_data')) || [];
-    let currentPass = localStorage.getItem('fina_secure_pass') || "luffy";
+    let currentPass = localStorage.getItem('fina_secure_pass') || "1234";
 
     function handleLogin() {
-        if(document.getElementById('passwordInput').value === currentPass) {
+        const input = document.getElementById('passwordInput').value;
+        if(input === currentPass) {
             document.getElementById('loginPage').style.display = 'none';
             document.getElementById('appPage').style.display = 'block';
-            confetti({ particleCount: 60, colors: ['#D4AF37'] });
+            confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 }, colors: ['#D4AF37', '#FFFFFF'] });
             render();
-        } else { alert("Akses Ditolak! Haki lo kurang kuat."); }
+        } else {
+            alert("Haki lo kurang kuat! Akses ditolak.");
+        }
     }
 
-    function toggleSettings() {
-        const modal = document.getElementById('settingsModal');
-        modal.style.display = (modal.style.display === 'flex') ? 'none' : 'flex';
-    }
-
-    function saveNewPass() {
-        const newPass = document.getElementById('newPassInput').value.trim();
-        if(newPass.length < 3) return alert("Sandi minimal 3 karakter!");
-        localStorage.setItem('fina_secure_pass', newPass);
-        currentPass = newPass;
-        alert("Sandi berhasil diubah! Gunakan sandi baru nanti.");
-        toggleSettings();
-    }
-
-    function addTransaction() {
+    function addTransaction(type) {
         const desc = document.getElementById('descInput').value;
-        const amount = parseInt(document.getElementById('amountInput').value);
+        let amount = parseInt(document.getElementById('amountInput').value);
         const curr = document.getElementById('currencySelect').value;
-        if(!desc || isNaN(amount)) return;
 
-        transactions.push({ id: Date.now(), desc, amount, curr });
-        localStorage.setItem('fina_gold_data', JSON.stringify(transactions));
+        if(!desc || isNaN(amount)) return alert("Isi data dengan benar!");
+        
+        // Jika pengeluaran, ubah angka jadi negatif
+        if(type === 'out') amount = -Math.abs(amount);
+        else amount = Math.abs(amount);
+
+        transactions.push({ id: Date.now(), desc, amount, curr, date: new Date().toLocaleDateString() });
+        saveData();
+        
         document.getElementById('descInput').value = '';
         document.getElementById('amountInput').value = '';
         render();
     }
 
     function deleteTx(id) {
-        transactions = transactions.filter(t => t.id !== id);
-        localStorage.setItem('fina_gold_data', JSON.stringify(transactions));
-        render();
+        if(confirm("Hapus catatan ini?")) {
+            transactions = transactions.filter(t => t.id !== id);
+            saveData();
+            render();
+        }
     }
 
     function render() {
         let idr = 0, thb = 0, html = '';
+        
         [...transactions].reverse().forEach(t => {
             if(t.curr === "IDR") idr += t.amount; else thb += t.amount;
+            
+            const color = t.amount >= 0 ? 'var(--success)' : 'var(--danger)';
+            const sign = t.amount >= 0 ? '+' : '';
+            
             html += `<tr>
-                <td style="color: #888;">${t.desc}</td>
-                <td style="text-align: right; color: ${t.amount >= 0 ? 'lime' : '#ff4444'}">
-                    ${t.amount.toLocaleString()} ${t.curr === "IDR" ? 'Rp' : '฿'}
+                <td>
+                    <div style="font-weight:bold; color:white;">${t.desc}</div>
+                    <div style="font-size:0.6rem; color:#555;">${t.date}</div>
                 </td>
-                <td style="width: 20px; text-align: right;">
-                    <span onclick="deleteTx(${t.id})" style="cursor:pointer; color:#444;">✕</span>
+                <td style="text-align: right; color: ${color}; font-weight:bold;">
+                    ${sign}${t.amount.toLocaleString()} ${t.curr}
+                </td>
+                <td style="width: 30px; text-align: right;">
+                    <span onclick="deleteTx(${t.id})" style="cursor:pointer; color:#333;">✕</span>
                 </td>
             </tr>`;
         });
+
         document.getElementById('saldoIDR').innerText = "Rp " + idr.toLocaleString();
         document.getElementById('saldoTHB').innerText = "฿ " + thb.toLocaleString();
-        document.getElementById('list').innerHTML = html;
+        document.getElementById('list').innerHTML = html || '<tr><td colspan="3" style="text-align:center; color:#444; padding:20px;">Belum ada catatan.</td></tr>';
+    }
+
+    function saveData() { localStorage.setItem('fina_gold_data', JSON.stringify(transactions)); }
+    function toggleSettings() {
+        const m = document.getElementById('settingsModal');
+        m.style.display = (m.style.display === 'flex') ? 'none' : 'flex';
+    }
+    function saveNewPass() {
+        const p = document.getElementById('newPassInput').value.trim();
+        if(p.length < 3) return alert("Sandi terlalu pendek!");
+        localStorage.setItem('fina_secure_pass', p);
+        currentPass = p;
+        alert("Sandi diperbarui!");
+        toggleSettings();
+    }
+    function clearData() {
+        if(confirm("Hapus semua riwayat keuangan? Data tidak bisa kembali!")) {
+            transactions = [];
+            saveData();
+            render();
+            toggleSettings();
+        }
     }
 </script>
 </body>
